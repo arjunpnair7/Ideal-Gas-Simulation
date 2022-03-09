@@ -31,7 +31,7 @@ class GasContainer {
   void AdvanceOneFrame();
 
   void checkForCollision(particle& particle1, particle& particle2);
-  vector<vec2> calculateCollisionVelocity(particle particle_1, particle particle_2);
+  vector<vec2> calculateCollisionVelocity(particle particle_1, particle particle_2) const;
  private:
     vector<particle> container_particles;
     glm::vec2 container_start_position;

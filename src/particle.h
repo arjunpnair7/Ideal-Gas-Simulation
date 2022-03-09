@@ -9,14 +9,14 @@
 class particle {
 public:
     particle(glm::vec2 position, glm::vec2 velocity, size_t radius);
-    glm::vec2 getCurrentPosition();
-    glm::vec2 getCurrentVelocity();
-    size_t getRadius();
+    glm::vec2 getCurrentPosition() const;
+    glm::vec2 getCurrentVelocity() const;
+    size_t getRadius() const;
     void updatePosition();
     void negateXVelocity();
     void negateYVelocity();
     void setVelocity(glm::vec2 new_velocity);
-    bool getCollisionStatus();
+    bool getCollisionStatus() const;
     void setCollisionStatus(bool collision_status);
 
 private:
