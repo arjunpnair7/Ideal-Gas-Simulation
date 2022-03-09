@@ -38,3 +38,11 @@ void particle::negateYVelocity() {
 void particle::setVelocity(glm::vec2 new_velocity) {
     current_velocity = new_velocity;
 }
+
+bool particle::getCollisionStatus() {
+    return has_collided;
+}
+
+void particle::setCollisionStatus(bool collision_status) {
+    has_collided = collision_status;
+}

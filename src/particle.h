@@ -16,11 +16,14 @@ public:
     void negateXVelocity();
     void negateYVelocity();
     void setVelocity(glm::vec2 new_velocity);
+    bool getCollisionStatus();
+    void setCollisionStatus(bool collision_status);
 
 private:
     glm::vec2 current_position;
     glm::vec2 current_velocity;
     size_t radius;
+    bool has_collided;
 };
 
 #endif //IDEAL_GAS_PARTICLE_H

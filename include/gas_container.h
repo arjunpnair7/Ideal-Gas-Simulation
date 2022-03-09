@@ -31,7 +31,7 @@ class GasContainer {
   void AdvanceOneFrame();
 
   void checkForCollision(particle& particle1, particle& particle2);
-
+  vector<vec2> calculateCollisionVelocity(particle particle_1, particle particle_2);
  private:
     vector<particle> container_particles;
     glm::vec2 container_start_position;
@@ -40,7 +40,6 @@ class GasContainer {
    * This variable is just for the purposes of demonstrating how to make a shape move
    * across a screen. Please remove it once you start working on your code.
    */
-  //int dummy_variable_ = 0;
 };
 
 }  // namespace idealgas
