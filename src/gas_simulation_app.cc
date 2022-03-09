@@ -1,7 +1,7 @@
 #include "gas_simulation_app.h"
 #include "particle.h"
 #include <random>
-#include "GasSimulationConstants.h"
+#include "gas_simulation_constants.h"
 
 using namespace SimulationConstants;
 using std::vector;
@@ -20,7 +20,7 @@ IdealGasApp::IdealGasApp() {
         std::mt19937 rng(dev());
         std::uniform_int_distribution<std::mt19937::result_type> positions(min_start_position, max_start_position);
         std::uniform_int_distribution<std::mt19937::result_type> velocity(min_velocity,max_velocity);
-        std::uniform_int_distribution<std::mt19937::result_type> radius(min_radius,max_radius);
+        std::uniform_int_distribution<std::mt19937::result_type> radius(min_radius,min_radius); //Change this for part 2 of Ideal Gas
 
         float v1 =  velocity(rng);
         float v2 = velocity(rng);

@@ -19,8 +19,8 @@ class IdealGasApp : public ci::app::App {
 
   // TODO: Delete this comment. Feel free to play around with these variables
   // provided that you can see the entire UI on your screen.
-  const int kWindowSize = 800;
-  const int kMargin = 350;
+  const int kWindowSize = 1000;
+  const int kMargin = 300;
 
  private:
   GasContainer container_;

@@ -14,32 +14,27 @@ namespace idealgas {
  */
 class GasContainer {
  public:
-  /**
-   * TODO: Add more parameters to this constructor, and add documentation.
-   */
+
   GasContainer(vector<particle> container_particles, vec2 container_start_position, vec2 container_dimensions);
   GasContainer();
   /**
    * Displays the container walls and the current positions of the particles.
    */
   void Display() const;
-
   /**
    * Updates the positions and velocities of all particles (based on the rules
    * described in the assignment documentation).
    */
   void AdvanceOneFrame();
-
   void checkForCollision(particle& particle1, particle& particle2);
   vector<vec2> calculateCollisionVelocity(particle particle_1, particle particle_2) const;
+  void checkForWallCollision(particle& current);
+  int getCurrentAmountOfParticles();
+
  private:
     vector<particle> container_particles;
     glm::vec2 container_start_position;
     glm::vec2 container_dimensions;
-    /**
-   * This variable is just for the purposes of demonstrating how to make a shape move
-   * across a screen. Please remove it once you start working on your code.
-   */
 };
 
-}  // namespace idealgas
+}

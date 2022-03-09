@@ -3,7 +3,7 @@
 #include "cinder/gl/gl.h"
 #include <map>
 #include <cmath>
-#include "GasSimulationConstants.h"
+#include "gas_simulation_constants.h"
 
 namespace idealgas {
 using glm::vec2;
@@ -11,9 +11,22 @@ using std::vector;
 using namespace SimulationConstants;
 
 GasContainer::GasContainer(vector<particle> container_particles, vec2 container_start_position, vec2 container_dimensions) {
-    this->container_particles = container_particles;
+    if (container_start_position.x < 0 || container_start_position.y < 0) {
+        throw std::invalid_argument("Negative start position");
+    } else if (container_dimensions.x < 0 || container_dimensions.y < 0) {
+        throw std::invalid_argument("Negative container dimensions");
+    }
+    for (int i = 0; i < container_particles.size(); i++) {
+        if (!(container_particles[i].getCurrentPosition().x < container_start_position.x) && !(container_particles[i].getCurrentPosition().y < container_start_position.y)) {
+            this->container_particles.push_back(container_particles[i]);
+        }
+    }
     this->container_start_position = container_start_position;
     this->container_dimensions = container_dimensions;
+}
+
+int GasContainer::getCurrentAmountOfParticles() {
+    return container_particles.size();
 }
 
 GasContainer::GasContainer() {}
@@ -32,31 +45,18 @@ void GasContainer::Display() const {
             ci::gl::color(ci::Color(particle_color_5));
         }
         particle current = container_particles[i];
-        ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius() + 2);
+        ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
     }
-    ci::gl::color(ci::Color("purple"));
+    ci::gl::color(ci::Color(container_color));
     ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
 }
 
 void GasContainer::AdvanceOneFrame() {
-    size_t right_wall = container_dimensions.x;
-    size_t left_wall = container_start_position.x;
-    size_t up_wall = container_start_position.y;
-    size_t down_wall = container_dimensions.y;
-
     for (particle& current: container_particles) {
         current.updatePosition();
         current.setCollisionStatus(false);
-        //If out of bounds on the right wall and particle was heading towards the right wall
-        if ((current.getCurrentPosition().x + current.getRadius() >= right_wall && current.getCurrentVelocity().x > 0)
-            || (current.getCurrentPosition().x - current.getRadius() <= left_wall && current.getCurrentVelocity().x < 0)) {
-            current.negateXVelocity();
-            return;
-        } if ((current.getCurrentPosition().y + current.getRadius() >= down_wall && current.getCurrentVelocity().y > 0)
-            || (current.getCurrentPosition().y - current.getRadius() <= up_wall && current.getCurrentVelocity().y < 0)) {
-            current.negateYVelocity();
-            return;
-        }
+        checkForWallCollision(current);
+
         for (int i = 0; i < container_particles.size(); i++) {
             for (int j = 0; j < container_particles.size(); j++) {
                 if (j != i) {
@@ -64,6 +64,24 @@ void GasContainer::AdvanceOneFrame() {
                 }
             }
         }
+    }
+}
+
+void GasContainer::checkForWallCollision(particle& current) {
+    size_t right_wall = container_dimensions.x;
+    size_t left_wall = container_start_position.x;
+    size_t up_wall = container_start_position.y;
+    size_t down_wall = container_dimensions.y;
+
+    //If out of bounds on the right wall and particle was heading towards the right wall
+    if ((current.getCurrentPosition().x + current.getRadius() >= right_wall && current.getCurrentVelocity().x > 0)
+        || (current.getCurrentPosition().x - current.getRadius() <= left_wall && current.getCurrentVelocity().x < 0)) {
+        current.negateXVelocity();
+        return;
+    } if ((current.getCurrentPosition().y + current.getRadius() >= down_wall && current.getCurrentVelocity().y > 0)
+          || (current.getCurrentPosition().y - current.getRadius() <= up_wall && current.getCurrentVelocity().y < 0)) {
+        current.negateYVelocity();
+        return;
     }
 }
 
@@ -88,10 +106,18 @@ void GasContainer::checkForCollision(particle& particle1, particle& particle2) {
     vector<vec2> new_velocity_vector;
     //Calculate the new velocity of particle 1
     vec2 p1_p2_velocity_diff = particle_1.getCurrentVelocity() - particle_2.getCurrentVelocity(); //(X1 - X2)
+    std::cout << "p1Position" << particle_1.getCurrentPosition() << std::endl;
+    std::cout << "p2Position" << particle_2.getCurrentPosition() << std::endl;
+
     vec2 p1_p2_position_diff = particle_1.getCurrentPosition() - particle_2.getCurrentPosition(); //(V1 - V2)
     float p1_p2_length = pow(glm::length(p1_p2_position_diff), 2); // ||X1 - X2||^2
 
     vec2 particle1_new_velocity = particle_1.getCurrentVelocity() - (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
+    std::cout << "vDiff" << p1_p2_velocity_diff << std::endl;
+    std::cout << "pDiff" << p1_p2_position_diff << std::endl;
+    std::cout << "here" << particle1_new_velocity << std::endl;
+    std::cout << "Dot" << (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)) << std::endl;
+    std::cout << "length" << p1_p2_length << std::endl;
     //Calculate the new velocity of particle 2
     vec2 p2_p1_velocity_diff = particle_2.getCurrentVelocity() - particle_1.getCurrentVelocity();
     vec2 p2_p1_position_diff = particle_2.getCurrentPosition() - particle_1.getCurrentPosition();
@@ -103,3 +129,5 @@ void GasContainer::checkForCollision(particle& particle1, particle& particle2) {
     return new_velocity_vector;
 }
 }
+
+
