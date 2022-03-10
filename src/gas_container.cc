@@ -93,6 +93,7 @@ void GasContainer::checkForCollision(particle& particle1, particle& particle2) {
     vec2 p1_p2_velocity_diff = particle1.getCurrentVelocity() - particle2.getCurrentVelocity();
     vec2 p1_p2_position_diff = particle1.getCurrentPosition() - particle2.getCurrentPosition();
 
+    //The last component of the and statement makes sure both particles collide only if they are heading towards each other
     if (glm::distance(particle1.getCurrentPosition(), particle2.getCurrentPosition()) < particle2.getRadius() + particle1.getRadius()
         && (!particle1.getCollisionStatus() && !particle2.getCollisionStatus())
         && glm::dot(p1_p2_velocity_diff, p1_p2_position_diff) < 0) {
@@ -105,23 +106,14 @@ void GasContainer::checkForCollision(particle& particle1, particle& particle2) {
         particle2.setCollisionStatus(true);
     }
 }
-
-    vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, particle particle_2) const {
+vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, particle particle_2) const {
     vector<vec2> new_velocity_vector;
     //Calculate the new velocity of particle 1
     vec2 p1_p2_velocity_diff = particle_1.getCurrentVelocity() - particle_2.getCurrentVelocity(); //(X1 - X2)
-    std::cout << "p1Position" << particle_1.getCurrentPosition() << std::endl;
-    std::cout << "p2Position" << particle_2.getCurrentPosition() << std::endl;
-
     vec2 p1_p2_position_diff = particle_1.getCurrentPosition() - particle_2.getCurrentPosition(); //(V1 - V2)
     float p1_p2_length = pow(glm::length(p1_p2_position_diff), 2); // ||X1 - X2||^2
-
     vec2 particle1_new_velocity = particle_1.getCurrentVelocity() - (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
-    std::cout << "vDiff" << p1_p2_velocity_diff << std::endl;
-    std::cout << "pDiff" << p1_p2_position_diff << std::endl;
-    std::cout << "here" << particle1_new_velocity << std::endl;
-    std::cout << "Dot" << (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)) << std::endl;
-    std::cout << "length" << p1_p2_length << std::endl;
+
     //Calculate the new velocity of particle 2
     vec2 p2_p1_velocity_diff = particle_2.getCurrentVelocity() - particle_1.getCurrentVelocity();
     vec2 p2_p1_position_diff = particle_2.getCurrentPosition() - particle_1.getCurrentPosition();
@@ -131,7 +123,7 @@ void GasContainer::checkForCollision(particle& particle1, particle& particle2) {
     new_velocity_vector.push_back(particle1_new_velocity);
     new_velocity_vector.push_back(particle2_new_velocity);
     return new_velocity_vector;
-}
+    }
 }
 
 

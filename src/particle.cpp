@@ -6,9 +6,6 @@
 #include "gas_simulation_constants.h"
 
 particle::particle(glm::vec2 position, glm::vec2 velocity, size_t radius) {
-//    if (position.x < SimulationConstants::min_start_x_position || position.y < SimulationConstants::min_start_y_position) {
-//        throw std::invalid_argument("Start position is out of bounds of container");
-//    }
     current_position = position;
     current_velocity = velocity;
     this->radius = radius;
