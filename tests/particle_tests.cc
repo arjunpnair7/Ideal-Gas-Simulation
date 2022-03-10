@@ -11,9 +11,6 @@ TEST_CASE("Constructing a particle") {
         REQUIRE(test_particle.getCurrentVelocity() == vec2(1,1));
         REQUIRE(test_particle.getRadius() == 1);
     }
-    SECTION("Invalid start position") {
-        REQUIRE_THROWS_AS(particle(vec2(0,0), vec2(1,1), 1), std::invalid_argument);
-    }
 }
 
 TEST_CASE("Testing getter methods") {
@@ -59,14 +56,3 @@ TEST_CASE("Testing mutator methods") {
         REQUIRE(test_particle.getCurrentPosition() == vec2(101, 101));
     }
 }
-
-/*
-TODO: Rename this test file. You'll also need to modify CMakeLists.txt.
-
-You can (and should) create more test files; this project is too big
-for all tests to be in the same file. Remember that, for each file (foo.cc)
-containing non-trivial code, you should have a corresponding test file
-(foo_test.cc)
-
-Make sure to add any files that you create to CMakeLists.txt.
-*/

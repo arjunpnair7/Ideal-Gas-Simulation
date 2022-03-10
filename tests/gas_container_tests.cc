@@ -49,32 +49,59 @@ TEST_CASE("Constructing a gas container") {
 }
 
 TEST_CASE("Testing wall collisions") {
-    SECTION("Testing horizontal wall collision") {
-        std::vector<particle> test_particles = createRandomParticleVector();
+    SECTION("Testing horizontal right wall collision") {
         vec2 container_start = vec2(0,0);
         vec2 container_dimensions = vec2(10,10);
         particle test_particle(vec2(9, 5), vec2(1,0), 1);
+        std::vector<particle> test_particles;
+        test_particles.push_back(test_particle);
         test_particle.updatePosition();
+        GasContainer test_container(test_particles, container_start, container_dimensions);
+        test_container.checkForWallCollision(test_particle);
+
+        REQUIRE(test_particle.getCurrentVelocity() == vec2(-1,0));
+    }
+    /* In this test case, the particle is at a would be collision point with the right wall. However
+     * it has a negative x velocity(meaning it is not moving towards the right wall) so it not considered
+     * a collision which means the velocity stays the same */
+    SECTION("Testing horizontal right wall collision with negative x velocity") {
+        std::vector<particle> test_particles = createRandomParticleVector();
+        vec2 container_start = vec2(0,0);
+        vec2 container_dimensions = vec2(10,10);
+        particle test_particle(vec2(10, 5), vec2(-1,0), 1);
         GasContainer test_container(test_particles, container_start, container_dimensions);
 
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(-1,0));
     }
-    SECTION("Testing vertical wall collision") {
-        std::vector<particle> test_particles = createRandomParticleVector();
+    SECTION("Testing vertical upper wall collision") {
+        std::vector<particle> test_particles;
         vec2 container_start = vec2(0,0);
         vec2 container_dimensions = vec2(10,10);
         particle test_particle(vec2(9, 9), vec2(0,1), 1);
+        test_particles.push_back(test_particle);
         test_particle.updatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
 
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(0,-1));
     }
+    SECTION("Testing vertical upper wall collision with negative y velocity") {
+        std::vector<particle> test_particles;
+        vec2 container_start = vec2(0,0);
+        vec2 container_dimensions = vec2(10,10);
+        particle test_particle(vec2(9, 10), vec2(0,-1), 1);
+        test_particles.push_back(test_particle);
+        GasContainer test_container(test_particles, container_start, container_dimensions);
+        test_container.checkForWallCollision(test_particle);
+
+        test_container.checkForWallCollision(test_particle);
+        REQUIRE(test_particle.getCurrentVelocity() == vec2(0,-1));
+    }
 }
 
-TEST_CASE("Testing particle collision calculations") {
-    SECTION("Testing horizontal wall collision") {
+TEST_CASE("Testing particle to particle collision") {
+    SECTION("Testing calculateCollisionVelocity") {
         particle test1(vec2(20, 20), vec2(.1, 0), 1);
         particle test2(vec2(21.4, 21.4), vec2(-.1, 0), 1);
 
@@ -84,12 +111,47 @@ TEST_CASE("Testing particle collision calculations") {
         GasContainer test_container(test_particles, container_start, container_dimensions);
 
         std::vector<vec2> test_list = test_container.calculateCollisionVelocity(test1, test2);
-        std::cout << test_list[0] << std::endl;
 
         REQUIRE((int) test_list[0].x == 0);
-        bool result = test_list[0].y > -.1 - tolerance || test_list[0].y < -.1 + .001;
-        REQUIRE(result == true);
+        bool result1 = test_list[0].y > -.1 - tolerance || test_list[0].y < -.1 + tolerance;
+        REQUIRE(result1 == true);
+
+        REQUIRE((int) test_list[1].x == 0);
+        bool result2 = test_list[1].y > .1 - tolerance || test_list[0].y < .1 + tolerance;
+        REQUIRE(result2 == true);
+    }
+    /* In this test case, the two particles are at a distance that would normally cause a collision. However,
+     * because they are not moving in the same direction, no collision has occured so the resultant velocities
+     * are the same as the particles original velocities. */
+    SECTION("Testing calculateCollisionVelocity with particles moving in same direction") {
+        particle test1(vec2(20, 20), vec2(.1, 0), 1);
+        particle test2(vec2(20, 20), vec2(.1, 0), 1);
+
+        std::vector<particle> test_particles;
+        test_particles.push_back(test1);
+        test_particles.push_back(test2);
+        vec2 container_start = vec2(0,0);
+        vec2 container_dimensions = vec2(100,100);
+        GasContainer test_container(test_particles, container_start, container_dimensions);
+
+        std::vector<vec2> test_list = test_container.calculateCollisionVelocity(test1, test2);
+
+        REQUIRE(test_container.getParticleList()[0].getCurrentVelocity() == vec2(.1, 0));
+        REQUIRE(test_container.getParticleList()[1].getCurrentVelocity() == vec2(.1, 0));
     }
 }
 
+TEST_CASE("Advance one frame") {
+    SECTION("Testing horizontal wall collision") {
+        particle test1(vec2(20, 20), vec2(.1, 0), 1);
 
+        std::vector<particle> test_particles;
+        test_particles.push_back(test1);
+        vec2 container_start = vec2(0,0);
+        vec2 container_dimensions = vec2(100,100);
+        GasContainer test_container(test_particles, container_start, container_dimensions);
+        test_container.AdvanceOneFrame();
+
+        REQUIRE(test_container.getParticleList()[0].getCurrentPosition() == vec2(20.1, 20));
+    }
+}

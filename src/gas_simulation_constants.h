@@ -2,11 +2,10 @@
 #include <iostream>
 using std::string;
 /**
- * A class that contains constants to manipulate the simulation
+ * A header file that contains constants to manipulate the simulation as well as the test cases
  */
 
 namespace SimulationConstants {
-
     //Constants to manipulate the creation of the container
     const int number_of_particles_in_simulation = 50;
     const int container_start_x_position = 100;
@@ -33,5 +32,4 @@ namespace SimulationConstants {
     //Constants to use for test cases
     const int number_of_particles_in_test = 10;
     const float tolerance = .001;
-
 }

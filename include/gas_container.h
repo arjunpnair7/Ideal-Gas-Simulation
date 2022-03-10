@@ -1,5 +1,4 @@
 #pragma once
-
 #include "cinder/gl/gl.h"
 #include "../src/particle.h"
 #include <map>
@@ -17,6 +16,8 @@ class GasContainer {
 
   GasContainer(vector<particle> container_particles, vec2 container_start_position, vec2 container_dimensions);
   GasContainer();
+  int getCurrentAmountOfParticles();
+  vector<particle> getParticleList();
   /**
    * Displays the container walls and the current positions of the particles.
    */
@@ -26,15 +27,34 @@ class GasContainer {
    * described in the assignment documentation).
    */
   void AdvanceOneFrame();
+  /**
+   * Takes in two particles and determine if they are moving towards each other and are close enough
+   * to be considered a collision. If the particles are considered in a collision state, then the new velocities
+   * will be set accordingly.
+   * @param particle1 The first particle part of the potential collision
+   * @param particle2 The second particle part of the potential collision
+   */
   void checkForCollision(particle& particle1, particle& particle2);
+  /**
+   * Calculates the new velocities of both particles and returns them in a vector
+   * @param particle_1 The first particle part of the collision
+   * @param particle_2 The second particle part of the collision
+   * @return A vector containing the new velocities of the particles after the collision
+   *        This vector always has two elements, index 0 has new velocity of particle 1 and
+   *        index 1 has new velocity of particle 2
+   */
   vector<vec2> calculateCollisionVelocity(particle particle_1, particle particle_2) const;
+  /**
+   * Checks if the passed in particle has collided with any walls. If it has, it's velocity will be adjusted
+   * based upon the collision
+   * @param current The particle used to see if there has been a collision
+   */
   void checkForWallCollision(particle& current);
-  int getCurrentAmountOfParticles();
 
  private:
     vector<particle> container_particles;
-    glm::vec2 container_start_position;
-    glm::vec2 container_dimensions;
+    glm::vec2 container_start_position; // Where the top-left of the container starts
+    glm::vec2 container_dimensions; // The actual dimensions of the rectangular container
 };
 
 }

@@ -29,6 +29,10 @@ int GasContainer::getCurrentAmountOfParticles() {
     return container_particles.size();
 }
 
+vector<particle> GasContainer::getParticleList() {
+    return container_particles;
+}
+
 GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
