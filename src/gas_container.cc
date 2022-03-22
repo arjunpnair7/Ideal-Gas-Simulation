@@ -22,8 +22,30 @@ GasContainer::GasContainer(vector<particle> container_particles, vec2 container_
             this->container_particles.push_back(container_particles[i]);
         }
     }
+    vector<particle> mass1Particles;
+    vector<particle> mass2Particles;
+    vector<particle> mass3Particles;
+
+    for (particle current: this->container_particles) {
+        if (current.getMass() == particle_type_1_mass) {
+            mass1Particles.push_back(current);
+        } else if (current.getMass() == particle_type_2_mass) {
+            mass2Particles.push_back(current);
+        } else {
+            mass3Particles.push_back(current);
+        }
+    }
+
     this->container_start_position = container_start_position;
     this->container_dimensions = container_dimensions;
+    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
+    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
+    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
+
+    this->mass1_graph = graph1;
+    this->mass2_graph = graph2;
+    this->mass3_graph = graph3;
+
 }
 
 int GasContainer::getCurrentAmountOfParticles() {
@@ -50,38 +72,36 @@ void GasContainer::Display() const {
             ci::gl::color(ci::Color(particle_color_5));
         }
         particle current = container_particles[i];
-     //   ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
+        ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
     }
-   // ci::gl::color(ci::Color(container_color));
-   // ci::gl::drawSolidRect(ci::Rectf(glm::vec2(0,0), glm::vec2(100,100) ));
-    //ci::gl::drawString("Yellow Particle Histogram", glm::vec2(0, 100));
-    //ci::gl::draw
-  //  histogram test(glm::vec2(700, 700));
-   // histogram test2(glm::vec2(400, 400));
-   std::vector<particle> testData;
-    particle test1(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
-    particle tester2(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
-    particle test2(vec2(21.5, 21.4), vec2(0, 0), 1, 1.0);
+    ci::gl::color(ci::Color(container_color));
+    //ci::gl::drawSolidRect(ci::Rectf(glm::vec2(0,0), glm::vec2(100,100) ));
+    ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
+    std::vector<particle> testData;
+    for (int i = 0; i < container_particles.size(); i++) {
+        testData.push_back(container_particles[i]);
+    }
+//    particle test1(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
+//    particle tester2(vec2(19.9, 20), vec2(1, 1), 1, 1.0);
+//    particle test2(vec2(21.5, 21.4), vec2(1, 1), 1, 1.0);
+//
+//    particle test3(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
+//    particle test4(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
+//    particle test5(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
+//    particle test6(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
+//    testData.push_back(test1);
+//    testData.push_back(tester2);
+//    testData.push_back(test2);
+//    //testData.push_back(test3);
+//    //testData.push_back(test4);
+//    testData.push_back(test5);
+//    testData.push_back(test6);
 
-    particle test3(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
-    particle test4(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
-    particle test5(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
-    particle test6(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
-    testData.push_back(test1);
-    testData.push_back(tester2);
-    testData.push_back(test2);
-    //testData.push_back(test3);
-    //testData.push_back(test4);
-    testData.push_back(test5);
-    //testData.push_back(test6);
+   //histogram test(glm::vec2(700, 100), testData, "test1");
+    mass1_graph.drawHistogram();
+    mass2_graph.drawHistogram();
+    mass3_graph.drawHistogram();
 
-    histogram test(glm::vec2(100, 100), testData);
-    histogram testHistogram(glm::vec2(500, 500), testData);
-
-
-
-
-    //ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
 }
 
 void GasContainer::AdvanceOneFrame() {

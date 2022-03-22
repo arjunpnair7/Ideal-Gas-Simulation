@@ -1,6 +1,7 @@
 #pragma once
 #include "cinder/gl/gl.h"
 #include "../src/particle.h"
+#include "../src/histogram.h"
 #include <map>
 using glm::vec2;
 using std::vector;
@@ -55,6 +56,9 @@ class GasContainer {
     vector<particle> container_particles;
     glm::vec2 container_start_position; // Where the top-left of the container starts
     glm::vec2 container_dimensions; // The actual dimensions of the rectangular container
+    histogram mass1_graph;
+    histogram mass2_graph;
+    histogram mass3_graph;
 };
 
 }

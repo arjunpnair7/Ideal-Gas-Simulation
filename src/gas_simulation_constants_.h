@@ -31,7 +31,7 @@ namespace SimulationConstants {
     const int min_start_y_position = 100;
     const int min_start_position = 0;
     const int max_start_position = 500;
-    const int min_velocity = 1;
+    const int min_velocity = 0;
     const int max_velocity = 2;
     const int min_radius = 15;
     const int max_radius = 15;
