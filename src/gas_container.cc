@@ -11,55 +11,44 @@ using glm::vec2;
 using std::vector;
 using namespace SimulationConstants;
 
-GasContainer::GasContainer(vector<particle> container_particles, vec2 container_start_position, vec2 container_dimensions) {
+//Seperated into lines based on feedback from part 1
+GasContainer::GasContainer(vector<particle> container_particles,
+                           vec2 container_start_position, vec2 container_dimensions) {
     if (container_start_position.x < 0 || container_start_position.y < 0) {
         throw std::invalid_argument("Negative start position");
     } else if (container_dimensions.x < 0 || container_dimensions.y < 0) {
         throw std::invalid_argument("Negative container dimensions");
     }
-    for (int i = 0; i < container_particles.size(); i++) {
+    for (size_t i = 0; i < container_particles.size(); i++) {
         if (!(container_particles[i].getCurrentPosition().x < container_start_position.x) && !(container_particles[i].getCurrentPosition().y < container_start_position.y)) {
-            this->container_particles.push_back(container_particles[i]);
+            containers_particles.push_back(container_particles[i]);
         }
     }
-    vector<particle> mass1Particles;
-    vector<particle> mass2Particles;
-    vector<particle> mass3Particles;
-
-    for (particle current: this->container_particles) {
-        if (current.getMass() == particle_type_1_mass) {
-            mass1Particles.push_back(current);
-        } else if (current.getMass() == particle_type_2_mass) {
-            mass2Particles.push_back(current);
-        } else {
-            mass3Particles.push_back(current);
-        }
-    }
-
     this->container_start_position = container_start_position;
     this->container_dimensions = container_dimensions;
-    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
-    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
-    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
 
-    this->mass1_graph = graph1;
-    this->mass2_graph = graph2;
-    this->mass3_graph = graph3;
+
+
+    //histogram demo(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
+    //demo.drawHistogram();
+//    this->mass1_graph = graph1;
+//    this->mass2_graph = graph2;
+//    this->mass3_graph = graph3;
 
 }
 
-int GasContainer::getCurrentAmountOfParticles() {
-    return container_particles.size();
+size_t GasContainer::getCurrentAmountOfParticles() {
+    return containers_particles.size();
 }
 
 vector<particle> GasContainer::getParticleList() {
-    return container_particles;
+    return containers_particles;
 }
 
 GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
-    for (int i = 0; i < container_particles.size(); i++) {
+    for (size_t i = 0; i < containers_particles.size(); i++) {
         if (i % 5 == 0) {
             ci::gl::color(ci::Color(particle_color_1));
         } else if (i % 5 == 1) {
@@ -71,49 +60,48 @@ void GasContainer::Display() const {
         } else if (i % 5 == 4) {
             ci::gl::color(ci::Color(particle_color_5));
         }
-        particle current = container_particles[i];
+        particle current = containers_particles[i];
         ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
     }
     ci::gl::color(ci::Color(container_color));
-    //ci::gl::drawSolidRect(ci::Rectf(glm::vec2(0,0), glm::vec2(100,100) ));
     ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
     std::vector<particle> testData;
-    for (int i = 0; i < container_particles.size(); i++) {
-        testData.push_back(container_particles[i]);
+    for (size_t i = 0; i < containers_particles.size(); i++) {
+        testData.push_back(containers_particles[i]);
     }
-//    particle test1(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
-//    particle tester2(vec2(19.9, 20), vec2(1, 1), 1, 1.0);
-//    particle test2(vec2(21.5, 21.4), vec2(1, 1), 1, 1.0);
-//
-//    particle test3(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
-//    particle test4(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
-//    particle test5(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
-//    particle test6(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
-//    testData.push_back(test1);
-//    testData.push_back(tester2);
-//    testData.push_back(test2);
-//    //testData.push_back(test3);
-//    //testData.push_back(test4);
-//    testData.push_back(test5);
-//    testData.push_back(test6);
 
-   //histogram test(glm::vec2(700, 100), testData, "test1");
-    mass1_graph.drawHistogram();
-    mass2_graph.drawHistogram();
-    mass3_graph.drawHistogram();
+    vector<particle> mass1Particles;
+    vector<particle> mass2Particles;
+    vector<particle> mass3Particles;
 
+    for (particle current: containers_particles) {
+        if (current.getMass() == particle_type_1_mass) {
+            mass1Particles.push_back(current);
+        } else if (current.getMass() == particle_type_2_mass) {
+            mass2Particles.push_back(current);
+        } else {
+            mass3Particles.push_back(current);
+        }
+    }
+
+    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
+    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
+    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
+    graph1.drawHistogram();
+    graph2.drawHistogram();
+    graph3.drawHistogram();
 }
 
 void GasContainer::AdvanceOneFrame() {
-    for (particle& current: container_particles) {
+    for (particle& current: containers_particles) {
         current.updatePosition();
         current.setCollisionStatus(false);
         checkForWallCollision(current);
 
-        for (int i = 0; i < container_particles.size(); i++) {
-            for (int j = 0; j < container_particles.size(); j++) {
+        for (size_t i = 0; i < containers_particles.size(); i++) {
+            for (size_t j = 0; j < containers_particles.size(); j++) {
                 if (j != i) {
-                    checkForCollision(container_particles[i], container_particles[j]);
+                    checkForCollision(containers_particles[i], containers_particles[j]);
                 }
             }
         }
@@ -131,7 +119,8 @@ void GasContainer::checkForWallCollision(particle& current) {
         || (current.getCurrentPosition().x - current.getRadius() <= left_wall && current.getCurrentVelocity().x < 0)) {
         current.negateXVelocity();
         return;
-    } if ((current.getCurrentPosition().y + current.getRadius() >= down_wall && current.getCurrentVelocity().y > 0)
+    }
+    if ((current.getCurrentPosition().y + current.getRadius() >= down_wall && current.getCurrentVelocity().y > 0)
           || (current.getCurrentPosition().y - current.getRadius() <= up_wall && current.getCurrentVelocity().y < 0)) {
         current.negateYVelocity();
         return;

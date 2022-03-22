@@ -21,7 +21,7 @@ void histogram::drawHistogram() const {
     float bar2Counter = 0;
     float bar3Counter = 0;
 
-    for (int i = 0; i < this->frequencyData.size(); i++) {
+    for (size_t i = 0; i < this->frequencyData.size(); i++) {
         float current_speed = this->frequencyData[i];
         if (current_speed <= x_axis_cutoff_1) {
             bar1Counter++;
@@ -34,10 +34,6 @@ void histogram::drawHistogram() const {
     float bar1Height = (bar1Counter/frequencyData.size()) * histogram_height;
     float bar2Height = (bar2Counter/frequencyData.size()) * histogram_height;
     float bar3Height = (bar3Counter/frequencyData.size()) * histogram_height;
-
-    std::cout << bar1Height << std::endl;
-    std::cout << bar2Height << std::endl;
-    std::cout << bar3Height << std::endl;
 
     ci::gl::color(ci::Color("blue"));
     ci::gl::drawStrokedRect(ci::Rectf(topLeft, glm::vec2(topLeft.x + histogram_width,topLeft.y + histogram_height) ));
@@ -67,7 +63,6 @@ void histogram::drawHistogram() const {
     ci::gl::drawString("0", glm::vec2(topLeft.x - histogram_y_labels_padding, topLeft.y + histogram_height));
 
     ci::gl::drawString(graphTitle, glm::vec2(topLeft.x + x_label_padding + 2 * bar_width, topLeft.y));
-
 }
 
 std::vector<double> histogram::calculateSpeed(std::vector<particle> data) {

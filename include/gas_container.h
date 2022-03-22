@@ -17,7 +17,7 @@ class GasContainer {
 
   GasContainer(vector<particle> container_particles, vec2 container_start_position, vec2 container_dimensions);
   GasContainer();
-  int getCurrentAmountOfParticles();
+  size_t getCurrentAmountOfParticles();
   vector<particle> getParticleList();
   /**
    * Displays the container walls and the current positions of the particles.
@@ -53,7 +53,7 @@ class GasContainer {
   void checkForWallCollision(particle& current);
 
  private:
-    vector<particle> container_particles;
+    vector<particle> containers_particles;
     glm::vec2 container_start_position; // Where the top-left of the container starts
     glm::vec2 container_dimensions; // The actual dimensions of the rectangular container
     histogram mass1_graph;

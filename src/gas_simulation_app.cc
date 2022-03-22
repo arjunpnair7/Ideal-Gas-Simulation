@@ -14,7 +14,7 @@ IdealGasApp::IdealGasApp() {
     particle test1(vec2(19.9, 20), vec2(.1, 0), 1, 1.0);
     particle test2(vec2(21.5, 21.4), vec2(-.1, 0), 1, 1.0);
     std::vector<particle> testData;
-    for (int i = 0; i < number_of_particles_in_simulation; i++) {
+    for (size_t i = 0; i < number_of_particles_in_simulation; i++) {
         //Code excerpt from:
         //https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c
         std::random_device dev;
@@ -28,7 +28,7 @@ IdealGasApp::IdealGasApp() {
         float x1 = positions(rng) + min_start_x_position;
         float x2 = positions(rng) + min_start_y_position;
         float particle_radius = radius(rng);
-        int mass;
+        size_t mass;
         if (i % 3 == 0) {
             mass = particle_type_1_mass;
         } else if (i % 3 == 1) {
