@@ -11,11 +11,12 @@
  */
 class particle {
 public:
-    particle(glm::vec2 position, glm::vec2 velocity, size_t radius);
+    particle(glm::vec2 position, glm::vec2 velocity, size_t radius, float mass);
     glm::vec2 getCurrentPosition() const;
     glm::vec2 getCurrentVelocity() const;
     size_t getRadius() const;
     bool getCollisionStatus() const;
+    float getMass() const;
     void setCollisionStatus(bool collision_status);
     void setVelocity(glm::vec2 new_velocity);
     /**
@@ -35,6 +36,7 @@ private:
     glm::vec2 current_position;
     glm::vec2 current_velocity;
     size_t radius;
+    double mass;
     //If the particle has collided this frame cycle, has_collided will be true
     bool has_collided = false;
 };

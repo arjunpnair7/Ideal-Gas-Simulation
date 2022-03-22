@@ -3,7 +3,8 @@
 #include "cinder/gl/gl.h"
 #include <map>
 #include <cmath>
-#include "gas_simulation_constants.h"
+#include "gas_simulation_constants_.h"
+#include "histogram.cpp"
 
 namespace idealgas {
 using glm::vec2;
@@ -49,10 +50,38 @@ void GasContainer::Display() const {
             ci::gl::color(ci::Color(particle_color_5));
         }
         particle current = container_particles[i];
-        ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
+     //   ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
     }
-    ci::gl::color(ci::Color(container_color));
-    ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
+   // ci::gl::color(ci::Color(container_color));
+   // ci::gl::drawSolidRect(ci::Rectf(glm::vec2(0,0), glm::vec2(100,100) ));
+    //ci::gl::drawString("Yellow Particle Histogram", glm::vec2(0, 100));
+    //ci::gl::draw
+  //  histogram test(glm::vec2(700, 700));
+   // histogram test2(glm::vec2(400, 400));
+   std::vector<particle> testData;
+    particle test1(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
+    particle tester2(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
+    particle test2(vec2(21.5, 21.4), vec2(0, 0), 1, 1.0);
+
+    particle test3(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
+    particle test4(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
+    particle test5(vec2(19.9, 20), vec2(20, 20), 1, 1.0);
+    particle test6(vec2(21.5, 21.4), vec2(20, 20), 1, 1.0);
+    testData.push_back(test1);
+    testData.push_back(tester2);
+    testData.push_back(test2);
+    //testData.push_back(test3);
+    //testData.push_back(test4);
+    testData.push_back(test5);
+    //testData.push_back(test6);
+
+    histogram test(glm::vec2(100, 100), testData);
+    histogram testHistogram(glm::vec2(500, 500), testData);
+
+
+
+
+    //ci::gl::drawStrokedRect(ci::Rectf(container_start_position, container_dimensions ));
 }
 
 void GasContainer::AdvanceOneFrame() {
@@ -112,13 +141,17 @@ vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, parti
     vec2 p1_p2_velocity_diff = particle_1.getCurrentVelocity() - particle_2.getCurrentVelocity(); //(X1 - X2)
     vec2 p1_p2_position_diff = particle_1.getCurrentPosition() - particle_2.getCurrentPosition(); //(V1 - V2)
     float p1_p2_length = pow(glm::length(p1_p2_position_diff), 2); // ||X1 - X2||^2
-    vec2 particle1_new_velocity = particle_1.getCurrentVelocity() - (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
+    float p1_mass_adjustment = (2 * particle_2.getMass())/(particle_1.getMass() + particle_2.getMass());
+    vec2 particle1_new_velocity = particle_1.getCurrentVelocity() - p1_mass_adjustment *
+                                (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
 
     //Calculate the new velocity of particle 2
     vec2 p2_p1_velocity_diff = particle_2.getCurrentVelocity() - particle_1.getCurrentVelocity();
     vec2 p2_p1_position_diff = particle_2.getCurrentPosition() - particle_1.getCurrentPosition();
     float p2_p1_length = pow(glm::length(p2_p1_position_diff), 2);
-    vec2 particle2_new_velocity = particle_2.getCurrentVelocity() - ((glm::dot(p2_p1_velocity_diff, p2_p1_position_diff)/p2_p1_length)) * p2_p1_position_diff;
+    float p2_mass_adjustment = (2 * particle_1.getMass())/(particle_1.getMass() + particle_2.getMass());
+    vec2 particle2_new_velocity = particle_2.getCurrentVelocity() - p2_mass_adjustment *
+                                ((glm::dot(p2_p1_velocity_diff, p2_p1_position_diff)/p2_p1_length)) * p2_p1_position_diff;
 
     new_velocity_vector.push_back(particle1_new_velocity);
     new_velocity_vector.push_back(particle2_new_velocity);

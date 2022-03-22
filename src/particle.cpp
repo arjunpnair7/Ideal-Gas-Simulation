@@ -3,12 +3,13 @@
 //
 
 #include "particle.h"
-#include "gas_simulation_constants.h"
+#include "gas_simulation_constants_.h"
 
-particle::particle(glm::vec2 position, glm::vec2 velocity, size_t radius) {
+particle::particle(glm::vec2 position, glm::vec2 velocity, size_t radius, float mass) {
     current_position = position;
     current_velocity = velocity;
     this->radius = radius;
+    this->mass = mass;
 }
 
 glm::vec2 particle::getCurrentPosition() const {
@@ -21,6 +22,10 @@ glm::vec2 particle::getCurrentVelocity() const {
 
 size_t particle::getRadius()  const{
     return radius;
+}
+
+float particle::getMass()  const{
+    return mass;
 }
 
 void particle::updatePosition() {

@@ -61,7 +61,7 @@ TEST_CASE("Testing wall collisions") {
 
         REQUIRE(test_particle.getCurrentVelocity() == vec2(-1,0));
     }
-    /* In this test case, the particle is at a would be collision point with the right wall. However
+    /* In this test case, the particle is at a would be collision point with the right wall. However,
      * it has a negative x velocity(meaning it is not moving towards the right wall) so it not considered
      * a collision which means the velocity stays the same */
     SECTION("Testing horizontal right wall collision with negative x velocity") {
