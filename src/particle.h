@@ -5,6 +5,7 @@
 #ifndef IDEAL_GAS_PARTICLE_H
 #define IDEAL_GAS_PARTICLE_H
 #include "cinder/gl/gl.h"
+#include "gas_simulation_constants_.h"
 
 /**
  A class that is used to model a gas particle
@@ -31,6 +32,9 @@ public:
      * Multiplies the y velocity by negative 1
      */
     void negateYVelocity();
+
+    void increase_speed(float speed_change);
+    void decrease_speed(float speed_change);
 
 private:
     glm::vec2 current_position;

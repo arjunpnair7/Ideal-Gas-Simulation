@@ -3,7 +3,6 @@
 //
 
 #include "particle.h"
-#include "gas_simulation_constants_.h"
 
 particle::particle(glm::vec2 position, glm::vec2 velocity, size_t radius, float mass) {
     current_position = position;
@@ -51,3 +50,15 @@ bool particle::getCollisionStatus() const {
 void particle::setCollisionStatus(bool collision_status) {
     has_collided = collision_status;
 }
+
+void particle::increase_speed(float speed_change) {
+    current_velocity.x += speed_change;
+    current_velocity.y += speed_change;
+}
+
+void particle::decrease_speed(float speed_change) {
+    current_velocity.x *= speed_change;
+    current_velocity.y *= speed_change;
+}
+
+

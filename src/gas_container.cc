@@ -3,7 +3,6 @@
 #include "cinder/gl/gl.h"
 #include <map>
 #include <cmath>
-#include "gas_simulation_constants_.h"
 #include "histogram.cpp"
 
 namespace idealgas {
@@ -152,7 +151,7 @@ vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, parti
     float p1_p2_length = pow(glm::length(p1_p2_position_diff), 2); // ||X1 - X2||^2
     float p1_mass_adjustment = (2 * particle_2.getMass())/(particle_1.getMass() + particle_2.getMass());
     vec2 particle1_new_velocity = particle_1.getCurrentVelocity() - p1_mass_adjustment *
-                                (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
+                                                                    (glm::dot(p1_p2_velocity_diff, p1_p2_position_diff)/p1_p2_length) * p1_p2_position_diff;
 
     //Calculate the new velocity of particle 2
     vec2 p2_p1_velocity_diff = particle_2.getCurrentVelocity() - particle_1.getCurrentVelocity();
@@ -160,12 +159,24 @@ vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, parti
     float p2_p1_length = pow(glm::length(p2_p1_position_diff), 2);
     float p2_mass_adjustment = (2 * particle_1.getMass())/(particle_1.getMass() + particle_2.getMass());
     vec2 particle2_new_velocity = particle_2.getCurrentVelocity() - p2_mass_adjustment *
-                                ((glm::dot(p2_p1_velocity_diff, p2_p1_position_diff)/p2_p1_length)) * p2_p1_position_diff;
+                                                                    ((glm::dot(p2_p1_velocity_diff, p2_p1_position_diff)/p2_p1_length)) * p2_p1_position_diff;
 
     new_velocity_vector.push_back(particle1_new_velocity);
     new_velocity_vector.push_back(particle2_new_velocity);
     return new_velocity_vector;
     }
+
+void GasContainer::increaseSpeed(float speed_change) {
+    for (particle& current: containers_particles) {
+        current.increase_speed(speed_change);
+    }
+}
+
+void GasContainer::decreaseSpeed(float speed_change) {
+    for (particle& current: containers_particles) {
+        current.decrease_speed(speed_change);
+    }
+}
 }
 
 

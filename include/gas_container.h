@@ -2,6 +2,7 @@
 #include "cinder/gl/gl.h"
 #include "../src/particle.h"
 #include "../src/histogram.h"
+#include "cinder/app/App.h"
 #include <map>
 using glm::vec2;
 using std::vector;
@@ -19,7 +20,12 @@ class GasContainer {
   GasContainer();
   size_t getCurrentAmountOfParticles();
   vector<particle> getParticleList();
-  /**
+
+
+  void increaseSpeed(float speed_change);
+  void decreaseSpeed(float speed_change);
+
+    /**
    * Displays the container walls and the current positions of the particles.
    */
   void Display() const;
@@ -51,6 +57,7 @@ class GasContainer {
    * @param current The particle used to see if there has been a collision
    */
   void checkForWallCollision(particle& current);
+
 
  private:
     vector<particle> containers_particles;
