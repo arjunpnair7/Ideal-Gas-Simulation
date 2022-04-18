@@ -23,7 +23,7 @@ public:
     /**
      * Updates the current position vector by adding the velocity vector to position vector
      */
-    void updatePosition();
+    void updatePosition(size_t height, size_t lower_wall);
     /**
      * Multiplies the x velocity by negative 1
      */
@@ -35,6 +35,7 @@ public:
 
     void increase_speed(float speed_change);
     void decrease_speed(float speed_change);
+    float UpdateGravityForce(size_t height, float base_gravity);
 
 private:
     glm::vec2 current_position;
@@ -43,6 +44,7 @@ private:
     double mass;
     //If the particle has collided this frame cycle, has_collided will be true
     bool has_collided = false;
+    float gravity_;
 };
 
 #endif //IDEAL_GAS_PARTICLE_H

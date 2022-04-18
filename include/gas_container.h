@@ -66,6 +66,10 @@ class GasContainer {
     histogram mass1_graph;
     histogram mass2_graph;
     histogram mass3_graph;
+    size_t right_wall;
+    size_t left_wall;
+    size_t up_wall;
+    size_t down_wall;
 };
 
 }

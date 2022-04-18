@@ -38,7 +38,7 @@ namespace SimulationConstants {
     const int max_radius = 15;
     const float particle_type_1_mass = 5;
     const float particle_type_2_mass = 20;
-    const float particle_type_3_mass = 40;
+    const float particle_type_3_mass = 35;
 
     //Constants to use for test cases
     const int number_of_particles_in_test = 10;

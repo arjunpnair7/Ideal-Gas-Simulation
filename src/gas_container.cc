@@ -26,14 +26,16 @@ GasContainer::GasContainer(vector<particle> container_particles,
     this->container_start_position = container_start_position;
     this->container_dimensions = container_dimensions;
 
-
+     right_wall = container_dimensions.x;
+     left_wall = container_start_position.x;
+     up_wall = container_start_position.y;
+     down_wall = container_dimensions.y;
 
     //histogram demo(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
     //demo.drawHistogram();
 //    this->mass1_graph = graph1;
 //    this->mass2_graph = graph2;
 //    this->mass3_graph = graph3;
-
 }
 
 size_t GasContainer::getCurrentAmountOfParticles() {
@@ -48,18 +50,25 @@ GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
     for (size_t i = 0; i < containers_particles.size(); i++) {
-        if (i % 5 == 0) {
-            ci::gl::color(ci::Color(particle_color_1));
-        } else if (i % 5 == 1) {
-            ci::gl::color(ci::Color(particle_color_2));
-        } else if (i % 5 == 2){
-            ci::gl::color(ci::Color(particle_color_3));
-        } else if (i % 5 == 3) {
-            ci::gl::color(ci::Color(particle_color_4));
-        } else if (i % 5 == 4) {
-            ci::gl::color(ci::Color(particle_color_5));
-        }
+//        if (i % 5 == 0) {
+//            ci::gl::color(ci::Color(particle_color_1));
+//        } else if (i % 5 == 1) {
+//            ci::gl::color(ci::Color(particle_color_2));
+//        } else if (i % 5 == 2){
+//            ci::gl::color(ci::Color(particle_color_3));
+//        } else if (i % 5 == 3) {
+//            ci::gl::color(ci::Color(particle_color_4));
+//        } else if (i % 5 == 4) {
+//            ci::gl::color(ci::Color(particle_color_5));
+//        }
         particle current = containers_particles[i];
+        if (current.getMass() <= 5) {
+            ci::gl::color(ci::Color(particle_color_1)); //lightest: red
+        } else if (current.getMass() <= 20) {
+            ci::gl::color(ci::Color(particle_color_2));//middle: blue
+        } else if (current.getMass() <= 40) {
+            ci::gl::color(ci::Color(particle_color_3));//heaviest: green
+        }
         ci::gl::drawSolidCircle(vec2(current.getCurrentPosition().x, current.getCurrentPosition().y), current.getRadius());
     }
     ci::gl::color(ci::Color(container_color));
@@ -93,10 +102,10 @@ void GasContainer::Display() const {
 
 void GasContainer::AdvanceOneFrame() {
     for (particle& current: containers_particles) {
-        current.updatePosition();
+        current.updatePosition(up_wall, down_wall);
         current.setCollisionStatus(false);
         checkForWallCollision(current);
-
+        //current.UpdateGravityForce(up_wall);
         for (size_t i = 0; i < containers_particles.size(); i++) {
             for (size_t j = 0; j < containers_particles.size(); j++) {
                 if (j != i) {
@@ -108,10 +117,10 @@ void GasContainer::AdvanceOneFrame() {
 }
 
 void GasContainer::checkForWallCollision(particle& current) {
-    size_t right_wall = container_dimensions.x;
-    size_t left_wall = container_start_position.x;
-    size_t up_wall = container_start_position.y;
-    size_t down_wall = container_dimensions.y;
+//    size_t right_wall = container_dimensions.x;
+//    size_t left_wall = container_start_position.x;
+//    size_t up_wall = container_start_position.y;
+//    size_t down_wall = container_dimensions.y;
 
     //If out of bounds on the right wall and particle was heading towards the right wall
     if ((current.getCurrentPosition().x + current.getRadius() >= right_wall && current.getCurrentVelocity().x > 0)
