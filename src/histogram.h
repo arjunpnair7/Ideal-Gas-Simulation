@@ -9,12 +9,17 @@
 class histogram {
 public:
     histogram(glm::vec2 topLeft, std::vector<particle> frequencyData, std::string graphTitle);
+    histogram(std::vector<particle> gravity_data, std::string graphTitle, glm::vec2 topLeft);
     histogram();
     std::vector<double> calculateSpeed(std::vector<particle> data);
-    void drawHistogram() const;
+    void DrawSpeedHistogram() const;
+    void DrawGravitationalEnergyHistogram() const;
+
 private:
     std::vector<double> frequencyData;
+    std::vector<particle> containers_particle_data;
     glm::vec2 topLeft;
     std::string graphTitle;
+
 };
 #endif //IDEAL_GAS_HISTOGRAM_H

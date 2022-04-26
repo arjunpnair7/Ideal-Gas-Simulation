@@ -12,7 +12,16 @@ particle::particle(glm::vec2 position, glm::vec2 velocity, size_t radius, float 
     this->radius = radius;
     this->mass = mass;
     this->gravity_ = .01 * mass;
+    this->gravitational_energy = 0;
     //current_velocity.y -= gravity_;
+}
+
+void particle::updateGravitationalEnergy(size_t upper_wall) {
+    gravitational_energy = .0098 * mass * abs((current_position.y - upper_wall));
+}
+
+float particle::getGravitationalEnergy() const {
+    return gravitational_energy;
 }
 
 float particle::UpdateGravityForce(size_t height, float base_gravity) {//TODO:RENAME THIS
@@ -52,7 +61,7 @@ void particle::updatePosition(size_t height, size_t lower_wall) {
     float gravity_force = UpdateGravityForce(height, gravity_);
     current_velocity.y += gravity_force;
     current_position += current_velocity;
-    std::cout << "CURRENT VELOCITY: " << current_velocity.y << std::endl;
+   // std::cout << "CURRENT VELOCITY: " << current_velocity.y << std::endl;
     if (current_position.y >= lower_wall) {
         current_position.y = lower_wall;
         //current_velocity.y *= -1;

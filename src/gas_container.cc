@@ -32,7 +32,7 @@ GasContainer::GasContainer(vector<particle> container_particles,
      down_wall = container_dimensions.y;
 
     //histogram demo(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
-    //demo.drawHistogram();
+    //demo.DrawSpeedHistogram();
 //    this->mass1_graph = graph1;
 //    this->mass2_graph = graph2;
 //    this->mass3_graph = graph3;
@@ -50,17 +50,6 @@ GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
     for (size_t i = 0; i < containers_particles.size(); i++) {
-//        if (i % 5 == 0) {
-//            ci::gl::color(ci::Color(particle_color_1));
-//        } else if (i % 5 == 1) {
-//            ci::gl::color(ci::Color(particle_color_2));
-//        } else if (i % 5 == 2){
-//            ci::gl::color(ci::Color(particle_color_3));
-//        } else if (i % 5 == 3) {
-//            ci::gl::color(ci::Color(particle_color_4));
-//        } else if (i % 5 == 4) {
-//            ci::gl::color(ci::Color(particle_color_5));
-//        }
         particle current = containers_particles[i];
         if (current.getMass() <= 5) {
             ci::gl::color(ci::Color(particle_color_1)); //lightest: red
@@ -92,12 +81,17 @@ void GasContainer::Display() const {
         }
     }
 
-    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
-    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
-    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
-    graph1.drawHistogram();
-    graph2.drawHistogram();
-    graph3.drawHistogram();
+//    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
+//    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
+//    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
+
+    histogram graph1(mass1Particles, "Mass = " + std::to_string(particle_type_1_mass), glm::vec2(700, 100));
+    histogram graph2(mass2Particles, "Mass = " + std::to_string(particle_type_2_mass), glm::vec2(700, 350));
+    histogram graph3(mass3Particles, "Mass = " + std::to_string(particle_type_3_mass), glm::vec2(700, 600));
+
+    graph1.DrawSpeedHistogram();
+    graph2.DrawSpeedHistogram();
+    graph3.DrawSpeedHistogram();
 }
 
 void GasContainer::AdvanceOneFrame() {
@@ -105,6 +99,11 @@ void GasContainer::AdvanceOneFrame() {
         current.updatePosition(up_wall, down_wall);
         current.setCollisionStatus(false);
         checkForWallCollision(current);
+        std::cout << "UPPER WALL: " << up_wall << std::endl;
+        std::cout << "CURRENT Y POSITION: " << current.getCurrentPosition().y << std::endl;
+        std::cout << "BEFORE: " << current.getGravitationalEnergy() << std::endl;
+        current.updateGravitationalEnergy(down_wall);
+        std::cout << "AFTER: " << current.getGravitationalEnergy() << std::endl;
         //current.UpdateGravityForce(up_wall);
         for (size_t i = 0; i < containers_particles.size(); i++) {
             for (size_t j = 0; j < containers_particles.size(); j++) {

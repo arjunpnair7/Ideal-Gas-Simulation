@@ -18,8 +18,10 @@ public:
     size_t getRadius() const;
     bool getCollisionStatus() const;
     float getMass() const;
+    float getGravitationalEnergy() const;
     void setCollisionStatus(bool collision_status);
     void setVelocity(glm::vec2 new_velocity);
+    void updateGravitationalEnergy(size_t upper_wall);
     /**
      * Updates the current position vector by adding the velocity vector to position vector
      */
@@ -45,6 +47,7 @@ private:
     //If the particle has collided this frame cycle, has_collided will be true
     bool has_collided = false;
     float gravity_;
+    float gravitational_energy;
 };
 
 #endif //IDEAL_GAS_PARTICLE_H
