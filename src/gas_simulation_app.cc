@@ -66,6 +66,15 @@ namespace idealgas {
     void IdealGasApp::keyDown(ci::app::KeyEvent event) {
         //container_.getParticleList()
         switch (event.getCode()) {
+
+            case ci::app::KeyEvent::KEY_s:
+                container_.DecreaseParticlesInContainer();
+                break;
+
+            case ci::app::KeyEvent::KEY_a:
+                container_.IncreaseParticlesInContainer();
+                break;
+
             case ci::app::KeyEvent::KEY_UP:
                 container_.increaseSpeed(.5);
                 break;

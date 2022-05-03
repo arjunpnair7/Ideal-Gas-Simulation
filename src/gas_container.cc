@@ -49,7 +49,7 @@ vector<particle> GasContainer::getParticleList() {
 GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
-    for (size_t i = 0; i < containers_particles.size(); i++) {
+    for (size_t i = 0; i < total_amount_of_particles; i++) {
         particle current = containers_particles[i];
         if (current.getMass() <= 5) {
             ci::gl::color(ci::Color(particle_color_1)); //lightest: red
@@ -185,6 +185,14 @@ void GasContainer::decreaseSpeed(float speed_change) {
         current.decrease_speed(speed_change);
     }
 }
+
+    void GasContainer::IncreaseParticlesInContainer() {
+        total_amount_of_particles++;
+    }
+
+    void GasContainer::DecreaseParticlesInContainer() {
+        total_amount_of_particles--;
+    }
 }
 
 

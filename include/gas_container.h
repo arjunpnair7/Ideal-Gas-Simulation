@@ -58,6 +58,9 @@ class GasContainer {
    */
   void checkForWallCollision(particle& current);
 
+  void IncreaseParticlesInContainer();
+  void DecreaseParticlesInContainer();
+
 
  private:
     vector<particle> containers_particles;
@@ -70,6 +73,7 @@ class GasContainer {
     size_t left_wall;
     size_t up_wall;
     size_t down_wall;
+    size_t total_amount_of_particles;
 };
 
 }
