@@ -25,18 +25,34 @@ public:
     /**
      * Updates the current position vector by adding the velocity vector to position vector
      */
-    void updatePosition(size_t height, size_t lower_wall);
+    void UpdatePosition(size_t height, size_t lower_wall);
     /**
      * Multiplies the x velocity by negative 1
      */
-    void negateXVelocity();
+    void NegateXVelocity();
     /**
      * Multiplies the y velocity by negative 1
      */
-    void negateYVelocity();
+    void NegateYVelocity();
 
-    void increase_speed(float speed_change);
-    void decrease_speed(float speed_change);
+    /**
+     * Increases the speed of a particle
+     * @param speed_change The amount of speed change
+     */
+    void Increase_speed(float speed_change);
+    /**
+     * Decreases the speed of a particle
+     * @param speed_change The amount of speed change
+     */
+    void Decrease_speed(float speed_change);
+    /**
+     * Calculates the amount of gravitational energy an
+     * object has based upon its current y position and then
+     * updates its gravity force property
+     * @param height
+     * @param base_gravity
+     * @return The updated gravity force of the particle
+     */
     float UpdateGravityForce(size_t height, float base_gravity);
 
 private:

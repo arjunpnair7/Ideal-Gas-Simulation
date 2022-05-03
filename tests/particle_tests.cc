@@ -77,14 +77,14 @@ TEST_CASE("Testing mutator methods") {
     }SECTION("Test setVelocity") {
         test_particle.setVelocity(vec2(10, 10));
         REQUIRE(test_particle.getCurrentVelocity() == vec2(10, 10));
-    }SECTION("Test negateXVelocity") {
-        test_particle.negateXVelocity();
+    }SECTION("Test NegateXVelocity") {
+        test_particle.NegateXVelocity();
         REQUIRE(test_particle.getCurrentVelocity() == vec2(-1, 1));
-    }SECTION("Test negateYVelocity") {
-        test_particle.negateYVelocity();
+    }SECTION("Test NegateYVelocity") {
+        test_particle.NegateYVelocity();
         REQUIRE(test_particle.getCurrentVelocity() == vec2(1, -1));
-    }SECTION("Test updatePosition") {
-        test_particle.updatePosition();
+    }SECTION("Test UpdatePosition") {
+        test_particle.UpdatePosition();
         REQUIRE(test_particle.getCurrentPosition() == vec2(101, 101));
     }
         //part 2

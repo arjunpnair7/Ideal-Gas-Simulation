@@ -27,7 +27,7 @@ namespace idealgas {
 
     private:
         GasContainer container_;
-        float simulation_speed = 0;
+        //float simulation_speed = 0;
     };
 
 }  // namespace idealgas

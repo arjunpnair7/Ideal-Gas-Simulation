@@ -40,14 +40,12 @@ namespace idealgas {
             particle random_particle(vec2(x1, x2), vec2(v1, v2), particle_radius, mass);
             testData.push_back(random_particle);
         }
-        std::cout << "iteration" << std::endl;
         std::vector<particle> testData_;
         particle tester(vec2(19.9, 20), vec2(0, 0), 1, 1.0);
         particle tester2(vec2(19.9, 20), vec2(5, 5), 1, 1.0);
 
         testData_.push_back(tester);
         testData_.push_back(tester2);
-        //histogram testHistogram(glm::vec2(150,150), testData_, "testTitle");
         container_ = GasContainer(testData,
                                   vec2(container_start_x_position,container_start_y_position),
                                   vec2(container_horizontal_dimension,container_vertical_dimension));
@@ -64,7 +62,6 @@ namespace idealgas {
     }
 
     void IdealGasApp::keyDown(ci::app::KeyEvent event) {
-        //container_.getParticleList()
         switch (event.getCode()) {
 
             case ci::app::KeyEvent::KEY_s:
@@ -81,7 +78,6 @@ namespace idealgas {
 
             case ci::app::KeyEvent::KEY_DOWN:
                 container_.decreaseSpeed(.5);
-                std::cout << "SIMULATION DECREASE SPEED: " << simulation_speed << std::endl;
                 break;
         }
     }

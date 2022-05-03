@@ -4,6 +4,8 @@
 #include <map>
 #include <cmath>
 #include "histogram.cpp"
+#include <random>
+
 
 namespace idealgas {
 using glm::vec2;
@@ -30,12 +32,8 @@ GasContainer::GasContainer(vector<particle> container_particles,
      left_wall = container_start_position.x;
      up_wall = container_start_position.y;
      down_wall = container_dimensions.y;
+     total_amount_of_particles = container_particles.size();
 
-    //histogram demo(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
-    //demo.DrawSpeedHistogram();
-//    this->mass1_graph = graph1;
-//    this->mass2_graph = graph2;
-//    this->mass3_graph = graph3;
 }
 
 size_t GasContainer::getCurrentAmountOfParticles() {
@@ -49,7 +47,7 @@ vector<particle> GasContainer::getParticleList() {
 GasContainer::GasContainer() {}
 
 void GasContainer::Display() const {
-    for (size_t i = 0; i < total_amount_of_particles; i++) {
+    for (size_t i = 0; i < containers_particles.size(); i++) {
         particle current = containers_particles[i];
         if (current.getMass() <= 5) {
             ci::gl::color(ci::Color(particle_color_1)); //lightest: red
@@ -81,30 +79,19 @@ void GasContainer::Display() const {
         }
     }
 
-//    histogram graph1(glm::vec2(700, 100), mass1Particles, "Mass = " + std::to_string(particle_type_1_mass));
-//    histogram graph2(glm::vec2(700, 350), mass2Particles, "Mass = " + std::to_string(particle_type_2_mass));
-//    histogram graph3(glm::vec2(700, 600), mass3Particles, "Mass = " + std::to_string(particle_type_3_mass));
-
     histogram graph1(mass1Particles, "Mass = " + std::to_string(particle_type_1_mass), glm::vec2(700, 100));
     histogram graph2(mass2Particles, "Mass = " + std::to_string(particle_type_2_mass), glm::vec2(700, 350));
     histogram graph3(mass3Particles, "Mass = " + std::to_string(particle_type_3_mass), glm::vec2(700, 600));
+    histogram graph4("pressure", containers_particles, glm::vec2(400, 700));
 
-    graph1.DrawSpeedHistogram();
-    graph2.DrawSpeedHistogram();
-    graph3.DrawSpeedHistogram();
 }
 
 void GasContainer::AdvanceOneFrame() {
     for (particle& current: containers_particles) {
-        current.updatePosition(up_wall, down_wall);
+        current.UpdatePosition(up_wall, down_wall);
         current.setCollisionStatus(false);
         checkForWallCollision(current);
-        std::cout << "UPPER WALL: " << up_wall << std::endl;
-        std::cout << "CURRENT Y POSITION: " << current.getCurrentPosition().y << std::endl;
-        std::cout << "BEFORE: " << current.getGravitationalEnergy() << std::endl;
         current.updateGravitationalEnergy(down_wall);
-        std::cout << "AFTER: " << current.getGravitationalEnergy() << std::endl;
-        //current.UpdateGravityForce(up_wall);
         for (size_t i = 0; i < containers_particles.size(); i++) {
             for (size_t j = 0; j < containers_particles.size(); j++) {
                 if (j != i) {
@@ -116,20 +103,15 @@ void GasContainer::AdvanceOneFrame() {
 }
 
 void GasContainer::checkForWallCollision(particle& current) {
-//    size_t right_wall = container_dimensions.x;
-//    size_t left_wall = container_start_position.x;
-//    size_t up_wall = container_start_position.y;
-//    size_t down_wall = container_dimensions.y;
-
     //If out of bounds on the right wall and particle was heading towards the right wall
     if ((current.getCurrentPosition().x + current.getRadius() >= right_wall && current.getCurrentVelocity().x > 0)
         || (current.getCurrentPosition().x - current.getRadius() <= left_wall && current.getCurrentVelocity().x < 0)) {
-        current.negateXVelocity();
+        current.NegateXVelocity();
         return;
     }
     if ((current.getCurrentPosition().y + current.getRadius() >= down_wall && current.getCurrentVelocity().y > 0)
           || (current.getCurrentPosition().y - current.getRadius() <= up_wall && current.getCurrentVelocity().y < 0)) {
-        current.negateYVelocity();
+        current.NegateYVelocity();
         return;
     }
 }
@@ -176,22 +158,46 @@ vector<vec2> GasContainer::calculateCollisionVelocity(particle particle_1, parti
 
 void GasContainer::increaseSpeed(float speed_change) {
     for (particle& current: containers_particles) {
-        current.increase_speed(speed_change);
+        current.Increase_speed(speed_change);
     }
 }
 
 void GasContainer::decreaseSpeed(float speed_change) {
     for (particle& current: containers_particles) {
-        current.decrease_speed(speed_change);
+        current.Decrease_speed(speed_change);
     }
 }
 
     void GasContainer::IncreaseParticlesInContainer() {
-        total_amount_of_particles++;
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_int_distribution<std::mt19937::result_type> positions(min_start_position, max_start_position);
+        std::uniform_int_distribution<std::mt19937::result_type> velocity(min_velocity,max_velocity);
+        std::uniform_int_distribution<std::mt19937::result_type> radius(min_radius,min_radius); //Change this for part 2 of Ideal Gas
+        std::uniform_int_distribution<std::mt19937::result_type> mass(0,4); //Change this for part 2 of Ideal Gas
+
+        float v1 =  velocity(rng);
+        float v2 = velocity(rng);
+        float x1 = positions(rng) + min_start_x_position;
+        float x2 = positions(rng) + min_start_y_position;
+        float particle_radius = radius(rng);
+        int i = mass(rng);
+        size_t particle_mass;
+        if (i % 3 == 0) {
+            particle_mass = particle_type_1_mass;
+        } else if (i % 3 == 1) {
+            particle_mass = particle_type_2_mass;
+        } else {
+            particle_mass = particle_type_3_mass;
+        }
+        particle random_particle(vec2(x1, x2), vec2(v1, v2), particle_radius, particle_mass);
+        containers_particles.push_back(random_particle);
     }
 
     void GasContainer::DecreaseParticlesInContainer() {
-        total_amount_of_particles--;
+        if (containers_particles.size() > 1) {
+            containers_particles.pop_back();
+        }
     }
 }
 

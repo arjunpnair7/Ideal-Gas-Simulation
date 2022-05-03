@@ -78,7 +78,7 @@ TEST_CASE("Testing wall collisions") {
         particle test_particle(vec2(9, 5), vec2(1,0), 1, 5);
         std::vector<particle> test_particles;
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(-1,0));
@@ -91,7 +91,7 @@ TEST_CASE("Testing wall collisions") {
         particle test_particle(vec2(2, 5), vec2(-1,0), 1, 5);
         std::vector<particle> test_particles;
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(1,0));
@@ -104,7 +104,7 @@ TEST_CASE("Testing wall collisions") {
         particle test_particle(vec2(2, 5), vec2(1,0), 1, 5);
         std::vector<particle> test_particles;
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(1,0));
@@ -131,7 +131,7 @@ TEST_CASE("Testing wall collisions") {
         particle test_particle(vec2(2, 10), vec2(0,1), 1, 5);
         std::vector<particle> test_particles;
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(0,-1));
@@ -144,7 +144,7 @@ TEST_CASE("Testing wall collisions") {
         particle test_particle(vec2(2, 10), vec2(0,-1), 1, 5);
         std::vector<particle> test_particles;
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
         test_container.checkForWallCollision(test_particle);
         REQUIRE(test_particle.getCurrentVelocity() == vec2(0,-1));
@@ -155,7 +155,7 @@ TEST_CASE("Testing wall collisions") {
         vec2 container_dimensions = vec2(10,10);
         particle test_particle(vec2(9, 9), vec2(0,1), 1, 5);
         test_particles.push_back(test_particle);
-        test_particle.updatePosition();
+        test_particle.UpdatePosition();
         GasContainer test_container(test_particles, container_start, container_dimensions);
 
         test_container.checkForWallCollision(test_particle);

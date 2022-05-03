@@ -10,10 +10,12 @@ class histogram {
 public:
     histogram(glm::vec2 topLeft, std::vector<particle> frequencyData, std::string graphTitle);
     histogram(std::vector<particle> gravity_data, std::string graphTitle, glm::vec2 topLeft);
+    histogram(std::string graphTitle, std::vector<particle> pressure_data, glm::vec2 topLeft);
     histogram();
     std::vector<double> calculateSpeed(std::vector<particle> data);
     void DrawSpeedHistogram() const;
     void DrawGravitationalEnergyHistogram() const;
+    void DrawPressureHistogram() const;
 
 private:
     std::vector<double> frequencyData;

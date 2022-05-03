@@ -21,6 +21,41 @@ histogram::histogram(std::vector<particle> gravity_data, std::string graphTitle,
     this->graphTitle = graphTitle;
     DrawGravitationalEnergyHistogram();
 }
+
+histogram::histogram(std::string graphTitle, std::vector<particle> pressure_data, glm::vec2 topLeft) {
+    this->containers_particle_data = pressure_data;
+    this->topLeft = topLeft;
+    this->graphTitle = graphTitle;
+    DrawPressureHistogram();
+}
+
+void histogram::DrawPressureHistogram() const {
+
+    float total_force = 950 * containers_particle_data.size();
+    std::cout << "FRACTION: " << (total_force/(histogram_width * histogram_height)) << std::endl;
+    float bar1Height = (total_force/(histogram_width * histogram_height))  * histogram_height;
+
+    ci::gl::color(ci::Color("blue"));
+    ci::gl::drawStrokedRect(ci::Rectf(topLeft, glm::vec2(topLeft.x + histogram_width,topLeft.y + histogram_height) ));
+    ci::gl::color(ci::Color("red"));
+
+    ci::gl::drawSolidRect(ci::Rectf(glm::vec2(topLeft.x, topLeft.y + histogram_height), glm::vec2(topLeft.x + bar_width, topLeft.y +
+                                                                                                                         histogram_height - bar1Height) ));
+    ci::gl::color(ci::Color("black"));
+    ci::gl::drawStrokedRect(ci::Rectf(glm::vec2(topLeft.x, topLeft.y + histogram_height), glm::vec2(topLeft.x + bar_width, topLeft.y +
+                                                                                                                           histogram_height - bar1Height) ));
+    ci::gl::drawStrokedRect(ci::Rectf(glm::vec2(topLeft.x, topLeft.y + histogram_height), glm::vec2(topLeft.x + bar_width, topLeft.y +
+                                                                                                                           histogram_height - bar1Height) ));
+
+    ci::gl::drawString("", glm::vec2(topLeft.x + x_label_padding, topLeft.y + histogram_height + label_y_offset));
+
+    ci::gl::drawString("", glm::vec2(topLeft.x - histogram_y_labels_padding, topLeft.y));
+    ci::gl::drawString("", glm::vec2(topLeft.x - histogram_y_labels_padding, topLeft.y + histogram_y_label_midpoint));
+    ci::gl::drawString("", glm::vec2(topLeft.x - histogram_y_labels_padding, topLeft.y + histogram_height));
+
+    ci::gl::drawString(graphTitle, glm::vec2(topLeft.x + x_label_padding + 2 * bar_width, topLeft.y));
+
+}
 void histogram::DrawGravitationalEnergyHistogram() const {
 
     float bar1Counter = 0;

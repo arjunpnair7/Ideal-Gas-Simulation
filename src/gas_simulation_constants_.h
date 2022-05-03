@@ -55,8 +55,6 @@ namespace SimulationConstants {
     const int histogram_width = 250;
     const int histogram_y_label_midpoint = histogram_height/2;
     const int histogram_y_labels_padding = 20;
-
-
 }
 
 
